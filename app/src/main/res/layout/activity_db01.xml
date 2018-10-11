@@ -46,9 +46,53 @@
             android:layout_height="wrap_content"
             android:id="@+id/edit_tableName"
             android:inputType="textPersonName"
-            android:text="customer"
+            android:text="custmer"
             android:layout_weight="1"/>
 
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_dataInsert"
+            android:text="3.데이터 추가하기"
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_name"
+            android:text="소녀시대"
+            android:inputType="textPersonName"/>
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_age"
+            android:text="19"
+            android:inputType="numberDecimal"
+
+            />
+        <EditText
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/edit_mobile"
+            android:text="010-3333-4444"
+            android:inputType="phone"
+
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Button
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/button_select"
+            android:text="4.데이터 조회하기."
+            />
     </LinearLayout>
     <ScrollView
         android:layout_width="match_parent"
