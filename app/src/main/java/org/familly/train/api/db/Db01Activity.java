@@ -1,4 +1,7 @@
 package org.familly.train.api.db;
+/**
+ * 1.헬퍼 클래스가 어떤 역할을 하는지 알아본다.
+ */
 
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
@@ -104,6 +107,11 @@ public class Db01Activity extends AppCompatActivity {
         });
 
     }
+
+    /**
+     *
+     * @param tName
+     */
     public void selectData(String tName) {
         //
         println("selectData() 호출됨.");
@@ -183,7 +191,13 @@ public class Db01Activity extends AppCompatActivity {
             println("db 오픈됨");
         }
     }
+
+    /**
+     *
+     * @param info
+     */
     public void println(String info){
         text_resultInfo.append(info + "\n");
     }
+
 }

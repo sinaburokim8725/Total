@@ -23,7 +23,7 @@
             android:layout_height="wrap_content"
             android:id="@+id/edit_dbName"
             android:inputType="textPersonName"
-            android:text="customer.db"
+            android:text="custmer.db"
             android:layout_weight="1"/>
 
     </LinearLayout>
