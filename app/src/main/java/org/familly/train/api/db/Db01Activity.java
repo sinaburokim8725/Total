@@ -26,10 +26,14 @@ public class Db01Activity extends AppCompatActivity {
     EditText edit_tableName;
     Button button_createTable;
 
+    //데이터추가
     Button   tInsert;
     EditText pName  ;
     EditText pAge   ;
+    //컬럼추가
+    EditText pFriend;
     EditText pMobile;
+    //
 
     Button dataSelect;
 
@@ -51,6 +55,7 @@ public class Db01Activity extends AppCompatActivity {
         pName   =(EditText) findViewById(R.id.edit_name);
         pAge    =(EditText) findViewById(R.id.edit_age);
         pMobile =(EditText) findViewById(R.id.edit_mobile);
+        pFriend =(EditText) findViewById(R.id.edit_friend);
 
         //4.데이터 조회참조
         dataSelect = (Button) findViewById(R.id.button_select);
@@ -85,6 +90,7 @@ public class Db01Activity extends AppCompatActivity {
                 String name = pName.getText().toString().trim();
                 String mobile = pMobile.getText().toString().trim();
                 String ageStr = pAge.getText().toString().trim();
+                String friend = pFriend.getText().toString().trim();
                 int age = -1; //Integer.parseInt(ageStr);
                 try {
 
@@ -94,7 +100,7 @@ public class Db01Activity extends AppCompatActivity {
                 }
 
                 //
-                insertData(name,mobile,age);
+                insertData(name,mobile,age,friend);
             }
         });
 
@@ -120,7 +126,7 @@ public class Db01Activity extends AppCompatActivity {
 
         if (db.isOpen()) {
 
-            String sql = "SELECT NAME , AGE , MOBILE FROM " + tName;
+            String sql = "SELECT NAME , AGE , MOBILE , FRIEND FROM " + tName;
 
             Cursor cursor = db.rawQuery(sql,null);
             println("조회된 데이터 총 건수 : " + cursor.getCount());
@@ -134,9 +140,9 @@ public class Db01Activity extends AppCompatActivity {
                 String name = cursor.getString(0);
                 int age = cursor.getInt(1);
                 String mobile = cursor.getString(2);
+                String friend = cursor.getString(3);
 
-                println("# " + i + "==>" + name + " , " + age + " , " + mobile);
-
+                println("# " + i + "==>" + name + " , " + age + " , " + mobile + "," + friend);
             }
             cursor.close();
 
@@ -146,13 +152,13 @@ public class Db01Activity extends AppCompatActivity {
 
         }
     }
-    public void insertData(String name,String mobile,int age) {
+    public void insertData(String name,String mobile,int age,String friend) {
         println("insertData() 호출");
         if (db.isOpen()) {
             String sql = "INSERT INTO CUSTMER"
-                    + " (name , mobile , age) VALUES (? ,? ,?);";
+                    + " (name , mobile , age , friend) VALUES (? ,? ,? ,?);";
 
-            Object[] params = {name , mobile , age};
+            Object[] params = {name , mobile , age , friend};
 
             db.execSQL(sql,params);
             println("데이터 추가함.");
@@ -196,7 +202,7 @@ public class Db01Activity extends AppCompatActivity {
          **/
         //헬퍼 클래스를 이용해서 데이베이스 생성오픈및 테이블 생성해본다.
         DatabaseHelper dbHelper = new DatabaseHelper(this,
-                dbName, null, 1);
+                dbName, null, 2);
         //헬퍼객체의 getWritableDatabase 가 SQLiteDatabase의를 획득하면서 내부판단
         //을 거쳐서 즉 새로운 설치인지 업그레이설치인지 버전정보비교해서
         // onCreate() 나 onUpgrade() 콜백함수를 부른다.
@@ -232,6 +238,7 @@ public class Db01Activity extends AppCompatActivity {
                     + " (" + "_id INTEGER PRIMARY KEY autoincrement,"
                     +  "name TEXT,"
                     +  "age  INTEGER,"
+                    +  "friend  TEXT,"
                     +  "mobile TEXT" +
                     ")";
             //쿼리실행
@@ -241,7 +248,16 @@ public class Db01Activity extends AppCompatActivity {
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            println("DatabaseHelper onUpgrade() 호출"
+                    + "버전정보 : " + oldVersion + "," + newVersion);
 
+            //요번에 배포되는 프로그램에 하나의 정보를 더넣는 화면으로 바뀜으로
+            //테이블에 컬럼하나를 추가할경우를 하나의 예로 들수있다.
+            String tableName = "custmer";
+            db.execSQL("ALTER TABLE " + tableName
+                    + " ADD friend TEXT" );
+
+            println("테이블내에 컬럼(friend) 추가");
 
         }
     }
