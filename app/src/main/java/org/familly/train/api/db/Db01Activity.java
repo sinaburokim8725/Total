@@ -3,8 +3,10 @@ package org.familly.train.api.db;
  * 1.헬퍼 클래스가 어떤 역할을 하는지 알아본다.
  */
 
+import android.content.Context;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -185,11 +187,20 @@ public class Db01Activity extends AppCompatActivity {
      */
     public void openDatabase(String dbName){
         println("openDatabase 호출 ");
+        /**
         //db생성및오픈
         db = openOrCreateDatabase(dbName, MODE_PRIVATE, null);
         if(db.isOpen()){
             println("db 오픈됨");
         }
+         **/
+        //헬퍼 클래스를 이용해서 데이베이스 생성오픈및 테이블 생성해본다.
+        DatabaseHelper dbHelper = new DatabaseHelper(this,
+                dbName, null, 1);
+        //헬퍼객체의 getWritableDatabase 가 SQLiteDatabase의를 획득하면서 내부판단
+        //을 거쳐서 즉 새로운 설치인지 업그레이설치인지 버전정보비교해서
+        // onCreate() 나 onUpgrade() 콜백함수를 부른다.
+        db = dbHelper.getWritableDatabase();
     }
 
     /**
@@ -199,5 +210,41 @@ public class Db01Activity extends AppCompatActivity {
     public void println(String info){
         text_resultInfo.append(info + "\n");
     }
+
+    //헬퍼 클래스를 만든다 이너클래스로
+    class DatabaseHelper extends SQLiteOpenHelper {
+
+
+        public DatabaseHelper( Context context,
+                               String name,
+                               SQLiteDatabase.CursorFactory factory,
+                              int version) {
+            super(context, name, factory, version);
+        }
+
+        @Override
+        public void onCreate(SQLiteDatabase db) {
+            println("DatabaseHelper onCreate() 호출됨");
+            //테이블 생성
+            String tableName = "custmer";
+
+            String sql = "CREATE TABLE if not exists " + tableName
+                    + " (" + "_id INTEGER PRIMARY KEY autoincrement,"
+                    +  "name TEXT,"
+                    +  "age  INTEGER,"
+                    +  "mobile TEXT" +
+                    ")";
+            //쿼리실행
+            db.execSQL(sql);
+            println("테이블 생성됨");
+        }
+
+        @Override
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+
+        }
+    }
+
 
 }
